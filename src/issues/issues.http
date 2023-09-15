@@ -1,0 +1,40 @@
+@server = http://localhost:3000
+@id = 6504041a2054ae9188443183
+
+GET {{server}}/issues
+
+###
+GET {{server}}/issues/{{id}}
+
+
+###
+POST {{server}}/issues
+Content-Type: application/json
+
+{
+  "category": "국회2",
+  "title": "테스트 링크 인데 엄청나게 길어지면 어떻게 될까요",
+  "link": "https://naver.com",
+  "summary": "요약",
+  "dueDate": "2022",
+  "isPublic": true,
+  "adminMemo": "메모"
+}
+
+###
+DELETE {{server}}/issues/{{id}}
+
+###
+PUT {{server}}/issues/{{id}}
+Content-Type: application/json
+
+
+{
+  "category": "입법 찬성",
+  "title": "테스트 링크 수정222",
+  "link": "https://naver.com",
+  "summary": "요약",
+  "dueDate": "2022",
+  "isPublic": "공개",
+  "adminMemo": "메모"
+}
