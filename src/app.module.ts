@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://mongo:27017'),
+    MongooseModule.forRoot(process.env.DB_URL),
     MongooseModule.forFeature([{ name: Issues.name, schema: IssuesSchema }]),
   ],
   controllers: [IssuesController],
