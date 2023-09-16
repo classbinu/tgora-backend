@@ -19,7 +19,7 @@ export class IssuesMongoRepository implements IssuesRepository {
   ) {}
 
   async getAllIssues(): Promise<Issues[]> {
-    return await this.issuesModel.find().exec();
+    return await this.issuesModel.find().sort({ dueDate: 1 }).exec();
   }
 
   async getIssue(id: string): Promise<Issues> {

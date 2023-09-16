@@ -5,6 +5,9 @@ import { IssuesMongoRepository } from './issues/issues.repository';
 import { IssuesService } from './issues/issues.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { config } from 'dotenv';
+
+config();
 
 @Module({
   imports: [
