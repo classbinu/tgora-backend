@@ -22,7 +22,7 @@ export class IssuesService {
     this.issuesRepository.deleteIssue(id);
   }
 
-  updateIssue(id, issueDto: IssuesDto) {
-    this.issuesRepository.updateIssue(id, issueDto);
+  updateIssue(id, issuesDto: IssuesDto) {
+    this.issuesRepository.updateIssue(id, issuesDto);
   }
 }

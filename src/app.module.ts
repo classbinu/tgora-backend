@@ -1,20 +1,21 @@
-import { Issues, IssuesSchema } from './issues/issues.schema';
-
-import { IssuesController } from './issues/issues.controller';
-import { IssuesMongoRepository } from './issues/issues.repository';
-import { IssuesService } from './issues/issues.service';
+import { AuthModule } from './auth/auth.module';
+import { IssuesModule } from './issues/issues.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UsersModule } from './users/users.module';
 import { config } from 'dotenv';
 
 config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DB_URL),
-    MongooseModule.forFeature([{ name: Issues.name, schema: IssuesSchema }]),
+    // MongooseModule.forRoot(process.env.DB_URL),
+    MongooseModule.forRoot('mongodb://localhost:27017'),
+    IssuesModule,
+    AuthModule,
+    UsersModule,
   ],
-  controllers: [IssuesController],
-  providers: [IssuesService, IssuesMongoRepository],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
