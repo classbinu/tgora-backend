@@ -4,12 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { UsersDto } from './users.model';
 import { Model } from 'mongoose';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 
 export interface UsersRepository {
-  getAllUsers(): Promise<UsersDto[]>;
-  createUser(usersDto: UsersDto);
-  deleteUser(id: string);
-  updateUser(id: string, usersDto: UsersDto);
+  findAll(): Promise<UsersDto[]>;
+  findByUsername(username: string);
+  create(usersDto: CreateUserDto);
+  update(id: string, usersDto: UpdateUserDto);
+  remove(id: string);
 }
 
 @Injectable()
@@ -18,28 +20,31 @@ export class UsersMongoRepository implements UsersRepository {
     @InjectModel(Users.name) private usersModel: Model<UsersDocument>,
   ) {}
 
-  async getAllUsers(): Promise<Users[]> {
+  async findAll(): Promise<Users[]> {
     return await this.usersModel.find().sort({ createdAt: -1 }).exec();
   }
 
-  async getUser(id: string): Promise<Users> {
-    return await this.usersModel.findById(id);
+  async findById(id: string) {
+    return await this.usersModel.findById(id).exec();
   }
 
-  async createUser(usersDto: UsersDto) {
-    const createUser = {
-      ...usersDto,
-      createdAt: new Date(),
-    };
-    this.usersModel.create(createUser);
+  async findByUsername(username: string) {
+    return await this.usersModel.findOne({ username: username }).exec();
   }
 
-  async deleteUser(id: string) {
-    await this.usersModel.findByIdAndDelete(id);
+  async create(usersDto: CreateUserDto) {
+    const createdUser = new this.usersModel(usersDto);
+    return createdUser.save();
   }
 
-  async updateUser(id: string, usersDto: UsersDto) {
+  async update(id: string, usersDto: UpdateUserDto) {
     const updateUser = { ...usersDto };
-    await this.usersModel.findByIdAndUpdate(id, updateUser);
+    await this.usersModel
+      .findByIdAndUpdate(id, updateUser, { new: true })
+      .exec();
+  }
+
+  async remove(id: string) {
+    await this.usersModel.findByIdAndDelete(id).exec();
   }
 }

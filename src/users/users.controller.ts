@@ -4,39 +4,41 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Post()
+  create(@Body() userDto: CreateUserDto) {
+    return this.usersService.create(userDto);
+  }
+
   @Get()
-  getAllUsers() {
-    return this.usersService.getAllUsers();
+  findAll() {
+    return this.usersService.findAll();
   }
 
   @Get('/:id')
-  getUser(@Param('id') id: string) {
-    return this.usersService.getUser(id);
+  findById(@Param('id') id: string) {
+    return this.usersService.findById(id);
   }
 
-  @Post()
-  createUser(@Body() UsersDto) {
-    this.usersService.createUser(UsersDto);
-    return 'success';
+  @UseGuards(AccessTokenGuard)
+  @Patch('/:id')
+  update(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
+    return this.usersService.update(id, userDto);
   }
 
   @Delete('/:id')
-  deleteUser(@Param('id') id: string) {
-    this.usersService.deleteUser(id);
-    return 'success';
-  }
-
-  @Put('/:id')
-  updateUser(@Param('id') id: string, @Body() UsersDto) {
-    return this.usersService.updateUser(id, UsersDto);
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 }

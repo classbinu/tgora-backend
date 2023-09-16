@@ -1,12 +1,26 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+
+import { ConfigService } from '@nestjs/config';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   @Get()
   getHello(): string {
-    return this.appService.getHello();
+    const message = this.configService.get('DB_URL');
+    return message;
+  }
+
+  @Get('service-url')
+  getServiceUrl(): string {
+    return this.configService.get('SERVICE_URL');
+  }
+
+  @Get('db-info')
+  getTest(): string {
+    console.log(this.configService.get('logLevel'));
+    console.log(this.configService.get('apiVersion'));
+    return this.configService.get('dbInfo');
   }
 }

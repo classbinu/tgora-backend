@@ -6,10 +6,10 @@ export type UsersDocument = Users & Document;
 
 @Schema()
 export class Users {
-  @Prop({ unique: true })
+  @Prop({ required: true, unique: true })
   username: string;
 
-  @Prop()
+  @Prop({ required: true })
   password: string;
 
   @Prop()
@@ -19,6 +19,9 @@ export class Users {
   phone: string;
 
   @Prop()
+  refreshToken: string | null;
+
+  @Prop({ default: Date.now })
   createdAt: Date;
 }
 
