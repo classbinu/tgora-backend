@@ -33,8 +33,8 @@ export class UsersController {
 
   @UseGuards(AccessTokenGuard)
   @Patch('/:id')
-  update(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
-    return this.usersService.update(id, userDto);
+  update(@Param('id') id: string, @Body() usersDto: UpdateUserDto) {
+    return this.usersService.update(id, usersDto);
   }
 
   @Delete('/:id')
