@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { IssuesService } from './issues.service';
 
@@ -14,8 +15,9 @@ export class IssuesController {
   constructor(private issuesService: IssuesService) {}
 
   @Get()
-  getAllIssues() {
-    return this.issuesService.getAllIssues();
+  getAllIssues(@Query() query) {
+    const { state, isPublic } = query;
+    return this.issuesService.getAllIssues(state, isPublic);
   }
 
   @Get('/:id')

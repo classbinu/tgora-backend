@@ -1,7 +1,7 @@
 @server = http://localhost:3000
 @id = 6504041a2054ae9188443183
 
-GET {{server}}/issues
+GET {{server}}/issues?state=closed&isPublic=public
 
 ###
 GET {{server}}/issues/{{id}}

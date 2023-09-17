@@ -6,7 +6,7 @@ import { IssuesDto } from './issues.model';
 import { Model } from 'mongoose';
 
 export interface IssuesRepository {
-  getAllIssues(): Promise<IssuesDto[]>;
+  getAllIssues(state: string, isPublic: string): Promise<IssuesDto[]>;
   createIssue(issuesDto: IssuesDto);
   deleteIssue(id: string);
   updateIssue(id: string, issuesDto: IssuesDto);
@@ -18,8 +18,36 @@ export class IssuesMongoRepository implements IssuesRepository {
     @InjectModel(Issues.name) private issuesModel: Model<IssuesDocument>,
   ) {}
 
-  async getAllIssues(): Promise<Issues[]> {
-    return await this.issuesModel.find().sort({ dueDate: 1 }).exec();
+  async getAllIssues(
+    state: string | undefined,
+    isPublic: string | undefined,
+  ): Promise<Issues[]> {
+    const currentDate = new Date();
+    const queryConditions = {
+      isPublic: '',
+      dueDate: {},
+    };
+
+    if (state === 'open') {
+      queryConditions.dueDate = { $gte: currentDate };
+    } else if (state === 'closed') {
+      queryConditions.dueDate = { $lt: currentDate };
+    } else if (state === 'all') {
+      delete queryConditions.dueDate;
+    }
+
+    if (isPublic === 'public') {
+      queryConditions.isPublic = '공개';
+    } else if (isPublic === 'private') {
+      queryConditions.isPublic = '비공개';
+    } else if (state === 'all') {
+      delete queryConditions.isPublic;
+    }
+
+    return await this.issuesModel
+      .find(queryConditions)
+      .sort({ dueDate: 1 })
+      .exec();
   }
 
   async getIssue(id: string): Promise<Issues> {

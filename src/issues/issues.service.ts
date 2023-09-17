@@ -6,8 +6,8 @@ import { IssuesMongoRepository } from './issues.repository';
 export class IssuesService {
   constructor(private issuesRepository: IssuesMongoRepository) {}
 
-  async getAllIssues() {
-    return await this.issuesRepository.getAllIssues();
+  async getAllIssues(state: string, isPublic: string) {
+    return await this.issuesRepository.getAllIssues(state, isPublic);
   }
 
   async getIssue(id) {
