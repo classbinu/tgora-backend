@@ -19,8 +19,6 @@ export class AppController {
 
   @Get('db-info')
   getTest(): string {
-    console.log(this.configService.get('logLevel'));
-    console.log(this.configService.get('apiVersion'));
-    return this.configService.get('dbInfo');
+    return '';
   }
 }

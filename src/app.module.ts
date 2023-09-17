@@ -1,4 +1,3 @@
-import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { IssuesModule } from './issues/issues.module';
@@ -18,7 +17,7 @@ console.log('env : ' + process.env.NODE_ENV);
     AuthModule,
     UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}
