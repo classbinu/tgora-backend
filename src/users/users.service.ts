@@ -1,7 +1,7 @@
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 
 import { Injectable } from '@nestjs/common';
-import { UsersDocument } from './Users.schema';
+import { UsersDocument } from './users.schema';
 import { UsersMongoRepository } from './users.repository';
 
 @Injectable()
