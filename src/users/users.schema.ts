@@ -12,13 +12,16 @@ export class Users {
   @Prop({ required: true })
   password: string;
 
+  @Prop({ required: true, unique: true, default: Date.now })
+  nickname: string;
+
   @Prop()
   email: string;
 
   @Prop()
   phone: string;
 
-  @Prop()
+  @Prop({ required: true })
   mentor: string;
 
   @Prop()

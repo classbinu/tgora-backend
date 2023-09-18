@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -24,6 +26,13 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('/profile')
+  @UseGuards(AccessTokenGuard)
+  getProfile(@Req() req: Request) {
+    const userId = req.user['sub'];
+    return this.usersService.findById(userId);
   }
 
   @Get('/:id')
