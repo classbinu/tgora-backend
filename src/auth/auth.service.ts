@@ -114,7 +114,7 @@ export class AuthService {
         },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-          expiresIn: '7d',
+          expiresIn: '14d',
         },
       ),
     ]);
@@ -125,14 +125,8 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(refreshToken: string) {
-    const decoededRefreshToken = this.jwtService.decode(refreshToken) as {
-      sub: string;
-      username: string;
-      iat: number;
-      exp: number;
-    };
-    const user = await this.usersService.findById(decoededRefreshToken.sub);
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.usersService.findById(userId);
     if (!user || !user.refreshToken) {
       throw new ForbiddenException('Access Denied');
     }

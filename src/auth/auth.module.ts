@@ -6,7 +6,12 @@ import { Module } from '@nestjs/common';
 import { RefreshTokenStrategy } from './strategies/regreshToken.strategy';
 import { UsersModule } from 'src/users/users.module';
 @Module({
-  imports: [UsersModule, JwtModule.register({})],
+  imports: [
+    UsersModule,
+    JwtModule.register({
+      global: true,
+    }),
+  ],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
 })

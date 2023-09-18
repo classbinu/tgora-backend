@@ -1,18 +1,11 @@
 import { CreateUserDto } from 'src/users/user.dto';
 import { AuthService } from './auth.service';
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { AuthGuard } from './guards/auth.guard';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthDto } from './auth.dto';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
-// import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
+import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -24,20 +17,8 @@ export class AuthController {
   }
 
   @Post('signin')
-  async login(
-    @Body() authDto: AuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const tokens = await this.authService.signIn(authDto);
-    const cookieOptions = {
-      domain: null,
-      path: '/',
-      httpOnly: true,
-    };
-    res
-      .cookie('accessToken', tokens.accessToken, cookieOptions)
-      .cookie('refreshToken', tokens.refreshToken, cookieOptions);
-    return tokens;
+  async login(@Body() authDto: AuthDto) {
+    return await this.authService.signIn(authDto);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -46,24 +27,18 @@ export class AuthController {
     this.authService.logout(req.user['sub']);
   }
 
-  // @UseGuards(RefreshTokenGuard)
+  @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  async refreshTokens(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const refreshToken = req.cookies['refreshToken'];
+  async refreshTokens(@Req() req: Request) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return await this.authService.refreshTokens(userId, refreshToken);
+  }
 
-    const tokens = await this.authService.refreshTokens(refreshToken);
-    const cookieOptions = {
-      domain: null,
-      path: '/',
-      httpOnly: true,
-    };
-    res
-      .cookie('accessToken', tokens.accessToken, cookieOptions)
-      .cookie('refreshToken', tokens.refreshToken, cookieOptions);
-    return tokens;
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Req() req: Request) {
+    return req.user;
   }
 }
 
