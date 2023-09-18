@@ -31,6 +31,30 @@ export class AuthService {
       );
     }
 
+    const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+    if (!objectIdPattern.test(usersDto.mentor)) {
+      throw new HttpException(
+        `${usersDto.mentor}는 유효하지 않습니다.`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const mentor = await this.usersService.findById(usersDto.mentor);
+    console.log(mentor);
+    if (!mentor) {
+      throw new HttpException(
+        '존재하지 않는 추천인입니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const mentees = await this.usersService.findUsersByMentorId(
+      usersDto.mentor,
+    );
+    if (mentees.length >= 2) {
+      throw new HttpException('만료된 초대장입니다.', HttpStatus.BAD_REQUEST);
+    }
+
     const hash = await this.hashData(usersDto.password);
     const newUser = await this.usersService.create({
       ...usersDto,

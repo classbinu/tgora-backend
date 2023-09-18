@@ -7,13 +7,8 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
-  @IsEmail()
-  email: string;
-
   @IsString()
-  phone: string;
-
-  refreshToken: string;
+  mentor: string;
 }
 
 export class UpdateUserDto {

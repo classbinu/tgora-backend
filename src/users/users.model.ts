@@ -3,5 +3,7 @@ export interface UsersDto {
   password: string;
   email: string;
   phone: string;
+  mentor: string;
+  refreshToken: string;
   createdAt: Date;
 }

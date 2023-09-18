@@ -1,8 +1,16 @@
 import { CreateUserDto } from 'src/users/user.dto';
 import { AuthService } from './auth.service';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthDto } from './auth.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
 
@@ -16,7 +24,19 @@ export class AuthController {
   }
 
   @Post('signin')
-  async login(@Body() authDto: AuthDto) {
+  async login(
+    @Body() authDto: AuthDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const tokens = await this.authService.signIn(authDto);
+    const cookieOptions = {
+      domain: null,
+      path: '/',
+      httpOnly: true,
+    };
+    res
+      .cookie('access_token', tokens.accessToken, cookieOptions)
+      .cookie('refresh_token', tokens.refreshToken, cookieOptions);
     return await this.authService.signIn(authDto);
   }
 

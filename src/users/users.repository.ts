@@ -32,6 +32,10 @@ export class UsersMongoRepository implements UsersRepository {
     return await this.usersModel.findOne({ username: username }).exec();
   }
 
+  async findUsersByMentorId(id: string) {
+    return await this.usersModel.find({ mentor: id }).exec();
+  }
+
   async create(usersDto: CreateUserDto) {
     const createdUser = new this.usersModel(usersDto);
     return createdUser.save();

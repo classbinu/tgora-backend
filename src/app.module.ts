@@ -12,7 +12,7 @@ console.log('env : ' + process.env.NODE_ENV);
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.DB_URL),
+    MongooseModule.forRoot(process.env.LOCAL_DB_URL), //LOCAL_DB_URL
     IssuesModule,
     AuthModule,
     UsersModule,

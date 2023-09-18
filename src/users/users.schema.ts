@@ -19,6 +19,9 @@ export class Users {
   phone: string;
 
   @Prop()
+  mentor: string;
+
+  @Prop()
   refreshToken: string | null;
 
   @Prop({ default: Date.now })
