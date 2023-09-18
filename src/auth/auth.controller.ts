@@ -12,7 +12,7 @@ import {
 import { AuthDto } from './auth.dto';
 import { Request, Response } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
-import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
+// import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -35,9 +35,9 @@ export class AuthController {
       httpOnly: true,
     };
     res
-      .cookie('access_token', tokens.accessToken, cookieOptions)
-      .cookie('refresh_token', tokens.refreshToken, cookieOptions);
-    return await this.authService.signIn(authDto);
+      .cookie('accessToken', tokens.accessToken, cookieOptions)
+      .cookie('refreshToken', tokens.refreshToken, cookieOptions);
+    return tokens;
   }
 
   @UseGuards(AccessTokenGuard)
@@ -46,14 +46,24 @@ export class AuthController {
     this.authService.logout(req.user['sub']);
   }
 
-  @UseGuards(RefreshTokenGuard)
+  // @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  refreshTokens(@Req() req: Request) {
-    const userId = req.user['sub'];
-    const refreshToken = req.user['refreshToken'];
-    console.log(userId);
-    console.log(refreshToken);
-    return this.authService.refreshTokens(userId, refreshToken);
+  async refreshTokens(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies['refreshToken'];
+
+    const tokens = await this.authService.refreshTokens(refreshToken);
+    const cookieOptions = {
+      domain: null,
+      path: '/',
+      httpOnly: true,
+    };
+    res
+      .cookie('accessToken', tokens.accessToken, cookieOptions)
+      .cookie('refreshToken', tokens.refreshToken, cookieOptions);
+    return tokens;
   }
 }
 

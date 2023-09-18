@@ -5,7 +5,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { RefreshTokenStrategy } from './strategies/regreshToken.strategy';
 import { UsersModule } from 'src/users/users.module';
-
 @Module({
   imports: [UsersModule, JwtModule.register({})],
   controllers: [AuthController],

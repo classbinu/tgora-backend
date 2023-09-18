@@ -40,7 +40,6 @@ export class AuthService {
     }
 
     const mentor = await this.usersService.findById(usersDto.mentor);
-    console.log(mentor);
     if (!mentor) {
       throw new HttpException(
         '존재하지 않는 추천인입니다.',
@@ -126,8 +125,14 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
-    const user = await this.usersService.findById(userId);
+  async refreshTokens(refreshToken: string) {
+    const decoededRefreshToken = this.jwtService.decode(refreshToken) as {
+      sub: string;
+      username: string;
+      iat: number;
+      exp: number;
+    };
+    const user = await this.usersService.findById(decoededRefreshToken.sub);
     if (!user || !user.refreshToken) {
       throw new ForbiddenException('Access Denied');
     }
