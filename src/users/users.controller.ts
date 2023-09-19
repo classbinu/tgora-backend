@@ -35,6 +35,13 @@ export class UsersController {
     return this.usersService.findById(userId);
   }
 
+  @Get('/mentees')
+  @UseGuards(AccessTokenGuard)
+  getMentees(@Req() req: Request) {
+    const value = req.user['sub'];
+    return this.usersService.findByKeyValue({ mentor: value });
+  }
+
   @Get('/:id')
   findById(@Param('id') id: string) {
     return this.usersService.findById(id);

@@ -26,7 +26,7 @@ export class AuthService {
     const user = await this.usersService.findByUsername(usersDto.username);
     if (user) {
       throw new HttpException(
-        '해당 유저가 이미 있습니다.',
+        '이미 존재하는 아이디입니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -69,8 +69,8 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('존재하지 않는 아이디입니다.');
     }
-    const passwordMatches = await argon2.verify(user.password, data.password);
 
+    const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches) {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
@@ -142,6 +142,27 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.username);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
+  }
+
+  async changePassword(userId: string, data) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('존재하지 않는 아이디입니다.');
+    }
+
+    const passwordMatches = await argon2.verify(
+      user.password,
+      data.oldPassword,
+    );
+    if (!passwordMatches) {
+      throw new UnauthorizedException('기존 비밀번호가 틀렸습니다.');
+    }
+
+    const hash = await this.hashData(data.newPassword);
+    this.usersService.update(userId, {
+      password: hash,
+    });
+    return { message: 'success' }; // json으로 반환하지 않으면 클라이언트에서 에러 발생함
   }
 
   // async validateUser(username: string, password: string) {

@@ -13,6 +13,10 @@ export class CreateUserDto {
 
 export class UpdateUserDto {
   @IsString()
+  @IsOptional()
+  password?: string;
+
+  @IsString()
   nickname?: string;
 
   @IsEmail()

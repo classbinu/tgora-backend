@@ -24,6 +24,10 @@ export class UsersService {
     return await this.usersRepository.findById(id);
   }
 
+  async findByKeyValue(condition) {
+    return await this.usersRepository.findByKeyValue(condition);
+  }
+
   async findUsersByMentorId(id) {
     return await this.usersRepository.findUsersByMentorId(id);
   }

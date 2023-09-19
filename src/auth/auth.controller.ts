@@ -1,7 +1,15 @@
 import { CreateUserDto } from 'src/users/user.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthDto } from './auth.dto';
 import { Request } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
@@ -39,6 +47,12 @@ export class AuthController {
   @Get('profile')
   getProfile(@Req() req: Request) {
     return req.user;
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Patch('password')
+  async changePassword(@Body() passwordDto, @Req() req: Request) {
+    return await this.authService.changePassword(req.user['sub'], passwordDto);
   }
 }
 

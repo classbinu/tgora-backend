@@ -32,8 +32,32 @@ export class UsersMongoRepository implements UsersRepository {
     return await this.usersModel.findOne({ username: username }).exec();
   }
 
+  async findByKeyValue(condition) {
+    return await this.usersModel
+      .find(condition)
+      .select([
+        '-username',
+        '-password',
+        '-nickname',
+        '-createdAt',
+        '-refreshToken',
+        '-__v',
+      ])
+      .exec();
+  }
+
   async findUsersByMentorId(id: string) {
-    return await this.usersModel.find({ mentor: id }).exec();
+    return await this.usersModel
+      .find({ mentor: id })
+      .select([
+        '-username',
+        '-password',
+        '-nickname',
+        '-createdAt',
+        '-refreshToken',
+        '-__v',
+      ])
+      .exec();
   }
 
   async create(usersDto: CreateUserDto) {

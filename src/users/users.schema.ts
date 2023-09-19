@@ -4,6 +4,18 @@ import { Document } from 'mongoose';
 
 export type UsersDocument = Users & Document;
 
+function generateRandomNickname() {
+  const characters = 'Ii';
+  let result = '';
+
+  for (let i = 0; i < 24; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+
+  return result;
+}
+
 @Schema()
 export class Users {
   @Prop({ required: true, unique: true })
@@ -12,7 +24,7 @@ export class Users {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true, unique: true, default: Date.now })
+  @Prop({ required: true, unique: true, default: generateRandomNickname })
   nickname: string;
 
   @Prop()
