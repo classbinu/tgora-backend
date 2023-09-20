@@ -50,7 +50,7 @@ export class AuthService {
     const mentees = await this.usersService.findUsersByMentorId(
       usersDto.mentor,
     );
-    if (mentees.length >= 2) {
+    if (mentees.length >= 5) {
       throw new HttpException('만료된 초대장입니다.', HttpStatus.BAD_REQUEST);
     }
 
@@ -59,7 +59,7 @@ export class AuthService {
       ...usersDto,
       password: hash,
     });
-    const tokens = await this.getTokens(newUser._id, newUser.username);
+    const tokens = await this.getTokens(newUser._id, newUser.nickname);
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
     return tokens;
   }
@@ -75,7 +75,7 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
 
-    const tokens = await this.getTokens(user._id, user.username);
+    const tokens = await this.getTokens(user._id, user.nickname);
     await this.updateRefreshToken(user._id, tokens.refreshToken);
     return tokens;
   }
@@ -95,12 +95,12 @@ export class AuthService {
     });
   }
 
-  async getTokens(userId: string, username: string) {
+  async getTokens(userId: string, nickname: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
           sub: userId,
-          username,
+          nickname,
         },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
@@ -110,7 +110,7 @@ export class AuthService {
       this.jwtService.signAsync(
         {
           sub: userId,
-          username,
+          nickname,
         },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
@@ -139,7 +139,7 @@ export class AuthService {
     if (!refreshTokenMatches) {
       throw new ForbiddenException('Access Denied');
     }
-    const tokens = await this.getTokens(user.id, user.username);
+    const tokens = await this.getTokens(user.id, user.nickname);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
