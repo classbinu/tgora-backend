@@ -60,8 +60,23 @@ export class FeedsService {
     return await this.feedsRepository.deleteFeed(id);
   }
 
-  async updateFeedWithoutAuth(id, field, userId) {
-    const allowedFields = ['views', 'likes', 'flags'];
+  async updateFeedLike(id, userId) {
+    const feed = await this.feedsRepository.getFeed(id);
+    if (!feed) {
+      throw new NotFoundException('피드를 찾을 수 없습니다.');
+    }
+
+    let type: string;
+    if (feed['likes'].includes(userId)) {
+      type = 'pop';
+    } else {
+      type = 'push';
+    }
+    return await this.feedsRepository.updateFeedLike(type, id, userId);
+  }
+
+  async updateFeedField(id, field, userId) {
+    const allowedFields = ['views', 'flags'];
 
     if (!allowedFields.includes(field)) {
       throw new NotFoundException('유효하지 않은 필드입니다.');
@@ -71,6 +86,22 @@ export class FeedsService {
     if (!feed) {
       throw new NotFoundException('피드를 찾을 수 없습니다.');
     }
-    return await this.feedsRepository.updateFeedWithoutAuth(id, field, userId);
+    return await this.feedsRepository.updateFeedField(id, field, userId);
+  }
+
+  async updateFeedCommentsWithoutAuth(
+    type: string,
+    feedId: string,
+    commentId: string,
+  ) {
+    const feed = await this.feedsRepository.getFeed(feedId);
+    if (!feed) {
+      throw new NotFoundException('피드를 찾을 수 없습니다.');
+    }
+    return await this.feedsRepository.updateFeedCommentsWithoutAuth(
+      type,
+      feedId,
+      commentId,
+    );
   }
 }

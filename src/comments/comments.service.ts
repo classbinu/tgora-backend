@@ -55,7 +55,14 @@ export class CommentsService {
       userId,
       nickname,
     };
-    await this.commentsRepository.createComment(createComment);
+    const newComment =
+      await this.commentsRepository.createComment(createComment);
+    await this.feedsService.updateFeedCommentsWithoutAuth(
+      'push',
+      newComment.feedId,
+      newComment._id,
+    );
+    return newComment;
   }
 
   async updateComment(id: string, commentsDto: CommentsDto, userId: string) {
@@ -81,6 +88,13 @@ export class CommentsService {
     if (comment.userId !== userId) {
       throw new UnauthorizedException('삭제 권한이 없습니다.');
     }
-    return await this.commentsRepository.deleteComment(id);
+
+    const deletedComment = await this.commentsRepository.deleteComment(id);
+    await this.feedsService.updateFeedCommentsWithoutAuth(
+      'pop',
+      deletedComment.feedId,
+      deletedComment._id,
+    );
+    return deletedComment;
   }
 }

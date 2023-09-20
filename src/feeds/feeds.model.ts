@@ -4,7 +4,7 @@ export interface FeedsDto {
   title: string;
   content: string;
   likes?: string[];
-  comments?: number;
+  comments?: string[];
   views?: string[];
   flags?: string[];
   createdAt?: Date;

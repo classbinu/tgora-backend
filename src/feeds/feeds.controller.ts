@@ -35,14 +35,20 @@ export class FeedsController {
     return await this.feedsService.createFeed(feedsDto, user);
   }
 
+  @Patch('/:id/likes')
+  async updateFeedLike(@Req() req: Request, @Param('id') id: string) {
+    const userId = req.user['sub'];
+    return await this.feedsService.updateFeedLike(id, userId);
+  }
+
   @Patch('/:id/:field')
-  async appendViewerFeed(
+  async updateFeedField(
     @Req() req: Request,
     @Param('id') id: string,
     @Param('field') field: string,
   ) {
     const userId = req.user['sub'];
-    return await this.feedsService.updateFeedWithoutAuth(id, field, userId);
+    return await this.feedsService.updateFeedField(id, field, userId);
   }
 
   @Put('/:id')

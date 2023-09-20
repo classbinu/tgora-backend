@@ -21,8 +21,8 @@ export class Feeds {
   @Prop([String])
   likes: string[];
 
-  @Prop({ default: 0 })
-  comments: number;
+  @Prop([String])
+  comments: string[];
 
   @Prop([String])
   views: string[];

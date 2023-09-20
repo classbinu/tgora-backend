@@ -36,7 +36,8 @@ export class CommentsMongoRepository implements CommentsRepository {
   }
 
   async createComment(commentsDto: CommentsDto) {
-    return await this.commentsModel.create(commentsDto);
+    const newComment = await this.commentsModel.create(commentsDto);
+    return newComment;
   }
 
   async updateComment(id: string, commentsDto: CommentsDto) {

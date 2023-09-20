@@ -10,7 +10,9 @@ export interface FeedsRepository {
   createFeed(feedsDto: FeedsDto);
   updateFeed(id: string, feedsDto: FeedsDto);
   deleteFeed(id: string);
-  updateFeedWithoutAuth(id, field, userId);
+  updateFeedLike(type: string, id: string, userId: string);
+  updateFeedField(id, field, userId);
+  updateFeedCommentsWithoutAuth(type, feedId, commentId);
 }
 
 @Injectable()
@@ -43,11 +45,46 @@ export class FeedsMongoRepository implements FeedsRepository {
     return await this.feedsModel.findByIdAndDelete(id);
   }
 
-  async updateFeedWithoutAuth(id: string, field: string, userId: string) {
-    const updateQuery = {
-      $addToSet: { [field]: userId },
-    };
+  async updateFeedLike(type: string, id: string, userId: string) {
+    let updateQuery;
+    if (type === 'push') {
+      updateQuery = {
+        $addToSet: { likes: userId },
+      };
+    } else if (type === 'pop') {
+      updateQuery = {
+        $pull: { likes: userId },
+      };
+    }
     return await this.feedsModel.findByIdAndUpdate(id, updateQuery, {
+      new: true,
+    });
+  }
+
+  async updateFeedField(id: string, field: string, userId: string) {
+    return await this.feedsModel.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: { [field]: userId },
+      },
+      {
+        new: true,
+      },
+    );
+  }
+
+  async updateFeedCommentsWithoutAuth(type, feedId: string, commentId: string) {
+    let updateQuery;
+    if (type === 'push') {
+      updateQuery = {
+        $addToSet: { comments: commentId },
+      };
+    } else if (type === 'pop') {
+      updateQuery = {
+        $pull: { comments: commentId },
+      };
+    }
+    return await this.feedsModel.findByIdAndUpdate(feedId, updateQuery, {
       new: true,
     });
   }
