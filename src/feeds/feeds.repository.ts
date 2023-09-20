@@ -10,6 +10,7 @@ export interface FeedsRepository {
   createFeed(feedsDto: FeedsDto);
   updateFeed(id: string, feedsDto: FeedsDto);
   deleteFeed(id: string);
+  updateFeedWithoutAuth(id, field, userId);
 }
 
 @Injectable()
@@ -40,5 +41,14 @@ export class FeedsMongoRepository implements FeedsRepository {
 
   async deleteFeed(id: string) {
     return await this.feedsModel.findByIdAndDelete(id);
+  }
+
+  async updateFeedWithoutAuth(id: string, field: string, userId: string) {
+    const updateQuery = {
+      $addToSet: { [field]: userId },
+    };
+    return await this.feedsModel.findByIdAndUpdate(id, updateQuery, {
+      new: true,
+    });
   }
 }

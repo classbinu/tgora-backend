@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Req,
@@ -32,6 +33,16 @@ export class FeedsController {
   async createFeed(@Body() feedsDto, @Req() req: Request) {
     const user = req.user;
     return await this.feedsService.createFeed(feedsDto, user);
+  }
+
+  @Patch('/:id/:field')
+  async appendViewerFeed(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Param('field') field: string,
+  ) {
+    const userId = req.user['sub'];
+    return await this.feedsService.updateFeedWithoutAuth(id, field, userId);
   }
 
   @Put('/:id')

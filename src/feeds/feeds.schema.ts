@@ -18,17 +18,17 @@ export class Feeds {
   @Prop({ required: true })
   content: string;
 
-  @Prop({ default: 0 })
-  likes: number;
+  @Prop([String])
+  likes: string[];
 
   @Prop({ default: 0 })
   comments: number;
 
-  @Prop({ default: 0 })
-  views: number;
+  @Prop([String])
+  views: string[];
 
-  @Prop({ default: 0 })
-  flags: number;
+  @Prop([String])
+  flags: string[];
 
   @Prop({ default: Date.now })
   createdAt: Date;

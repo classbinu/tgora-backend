@@ -59,4 +59,18 @@ export class FeedsService {
     }
     return await this.feedsRepository.deleteFeed(id);
   }
+
+  async updateFeedWithoutAuth(id, field, userId) {
+    const allowedFields = ['views', 'likes', 'flags'];
+
+    if (!allowedFields.includes(field)) {
+      throw new NotFoundException('유효하지 않은 필드입니다.');
+    }
+
+    const feed = await this.feedsRepository.getFeed(id);
+    if (!feed) {
+      throw new NotFoundException('피드를 찾을 수 없습니다.');
+    }
+    return await this.feedsRepository.updateFeedWithoutAuth(id, field, userId);
+  }
 }

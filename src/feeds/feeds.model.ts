@@ -3,9 +3,9 @@ export interface FeedsDto {
   nickname: string;
   title: string;
   content: string;
-  likes?: number;
+  likes?: string[];
   comments?: number;
-  views?: number;
-  flags?: number;
-  createdAt: Date;
+  views?: string[];
+  flags?: string[];
+  createdAt?: Date;
 }
