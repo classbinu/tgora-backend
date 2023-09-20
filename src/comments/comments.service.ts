@@ -22,6 +22,13 @@ export class CommentsService {
   }
 
   async getAllCommentsByFeedId(feedId: string) {
+    const feed = await this.feedsService.getFeed(feedId);
+    if (!feed) {
+      throw new HttpException(
+        '피드가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return await this.commentsRepository.getAllCommentsByFeedId(feedId);
   }
 

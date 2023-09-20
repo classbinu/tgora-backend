@@ -8,6 +8,7 @@ import {
   Put,
   Req,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
@@ -19,12 +20,13 @@ export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Get()
-  getAllIComments() {
+  getAllComments() {
     return this.commentsService.getAllComments();
   }
 
-  @Get()
-  getAllCommentsByFeedId(feedId: string) {
+  @Get('/feed')
+  getAllCommentsByFeedId(@Query() query) {
+    const { feedId } = query;
     return this.commentsService.getAllCommentsByFeedId(feedId);
   }
 

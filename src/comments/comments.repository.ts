@@ -24,7 +24,10 @@ export class CommentsMongoRepository implements CommentsRepository {
   }
 
   async getAllCommentsByFeedId(feedId: string): Promise<Comments[]> {
-    return await this.commentsModel.find({ feedId: feedId }).exec();
+    return await this.commentsModel
+      .find({ feedId: feedId })
+      .sort({ createdAt: 1 })
+      .exec();
   }
 
   async getComment(id: string): Promise<Comments> {
