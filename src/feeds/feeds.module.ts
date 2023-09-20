@@ -12,5 +12,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   controllers: [FeedsController],
   providers: [FeedsService, FeedsMongoRepository],
+  exports: [FeedsService],
 })
 export class FeedsModule {}
