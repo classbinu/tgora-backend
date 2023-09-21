@@ -4,11 +4,16 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { IssuesService } from './issues.service';
+import { Request } from 'express';
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 
 @Controller('issues')
 export class IssuesController {
@@ -40,5 +45,15 @@ export class IssuesController {
   @Put('/:id')
   updateIssue(@Param('id') id: string, @Body() issuesDto) {
     return this.issuesService.updateIssue(id, issuesDto);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Patch('/:issueId/participants')
+  async updateIssueParticipants(
+    @Req() req: Request,
+    @Param('issueId') id: string,
+  ) {
+    const userId = req.user['sub'];
+    return await this.issuesService.updateIssueParticipants(id, userId);
   }
 }

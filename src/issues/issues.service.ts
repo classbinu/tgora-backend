@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { IssuesDto } from './issues.model';
 import { IssuesMongoRepository } from './issues.repository';
 
@@ -14,15 +15,30 @@ export class IssuesService {
     return await this.issuesRepository.getIssue(id);
   }
 
-  createIssue(issuesDto: IssuesDto) {
-    this.issuesRepository.createIssue(issuesDto);
+  async createIssue(issuesDto: IssuesDto) {
+    return await this.issuesRepository.createIssue(issuesDto);
   }
 
-  deleteIssue(id) {
-    this.issuesRepository.deleteIssue(id);
+  async deleteIssue(id) {
+    return this.issuesRepository.deleteIssue(id);
   }
 
-  updateIssue(id, issuesDto: IssuesDto) {
-    this.issuesRepository.updateIssue(id, issuesDto);
+  async updateIssue(id, issuesDto: IssuesDto) {
+    return this.issuesRepository.updateIssue(id, issuesDto);
+  }
+
+  async updateIssueParticipants(issueId: string, userId: string) {
+    const issue = await this.issuesRepository.getIssue(issueId);
+    if (!issue) {
+      throw new NotFoundException('이슈를 찾을 수 없습니다.');
+    }
+
+    let type: string;
+    if (issue['participants'].includes(userId)) {
+      type = 'pop';
+    } else {
+      type = 'push';
+    }
+    return this.issuesRepository.updateIssueParticipants(type, issueId, userId);
   }
 }

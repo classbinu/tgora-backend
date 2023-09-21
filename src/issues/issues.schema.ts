@@ -6,28 +6,34 @@ export type IssuesDocument = Issues & Document;
 
 @Schema()
 export class Issues {
-  @Prop()
+  @Prop({ required: true })
   category: string;
 
-  @Prop()
+  @Prop({ required: true })
   title: string;
 
-  @Prop()
+  @Prop({ required: true })
   link: string;
 
   @Prop()
   summary: string;
 
-  @Prop()
+  @Prop({ required: true })
   dueDate: Date;
 
-  @Prop()
+  @Prop([String])
+  participants: string[];
+
+  @Prop([String])
+  nonParticipants: string[];
+
+  @Prop({ required: true })
   isPublic: string;
 
   @Prop()
   adminMemo: string;
 
-  @Prop()
+  @Prop({ required: true, default: Date.now })
   createdAt: Date;
 }
 

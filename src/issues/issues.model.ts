@@ -4,6 +4,8 @@ export interface IssuesDto {
   link: string;
   summary: string;
   dueDate: Date;
+  participants?: string[];
+  nonParticipants?: string[];
   isPublic: string;
   adminMemo: string;
   createdAt: Date;

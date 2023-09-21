@@ -70,4 +70,20 @@ export class IssuesMongoRepository implements IssuesRepository {
     const updateIssue = { ...issuesDto };
     await this.issuesModel.findByIdAndUpdate(id, updateIssue);
   }
+
+  async updateIssueParticipants(type: string, issueId: string, userId: string) {
+    let updateQuery;
+    if (type === 'push') {
+      updateQuery = {
+        $addToSet: { participants: userId },
+      };
+    } else if (type === 'pop') {
+      updateQuery = {
+        $pull: { participants: userId },
+      };
+    }
+    return await this.issuesModel.findByIdAndUpdate(issueId, updateQuery, {
+      new: true,
+    });
+  }
 }
