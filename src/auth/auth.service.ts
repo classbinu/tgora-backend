@@ -59,7 +59,7 @@ export class AuthService {
       ...usersDto,
       password: hash,
     });
-    const tokens = await this.getTokens(newUser._id, newUser.nickname);
+    const tokens = await this.getTokens(newUser._id, newUser.nickname.pop());
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
     return tokens;
   }
@@ -75,7 +75,7 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
 
-    const tokens = await this.getTokens(user._id, user.nickname);
+    const tokens = await this.getTokens(user._id, user.nickname.pop());
     await this.updateRefreshToken(user._id, tokens.refreshToken);
     return tokens;
   }
@@ -128,7 +128,9 @@ export class AuthService {
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.usersService.findById(userId);
     if (!user || !user.refreshToken) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException(
+        '유저 또는 유저의 리프레시 토큰이 존재하지 않습니다.',
+      );
     }
 
     const refreshTokenMatches = await argon2.verify(
@@ -137,9 +139,11 @@ export class AuthService {
     );
 
     if (!refreshTokenMatches) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException(
+        '서버의 리프레시 토큰과 요청한 리프레시 토큰이 일치하지 않습니다.',
+      );
     }
-    const tokens = await this.getTokens(user.id, user.nickname);
+    const tokens = await this.getTokens(user.id, user.nickname.pop());
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }

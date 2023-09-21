@@ -65,11 +65,39 @@ export class UsersMongoRepository implements UsersRepository {
     return createdUser.save();
   }
 
+  // async update(id: string, usersDto: UpdateUserDto) {
+  //   const updateUser = { ...usersDto };
+  //   await this.usersModel
+  //     .findByIdAndUpdate(id, updateUser, { new: true })
+  //     .exec();
+  // }
+
   async update(id: string, usersDto: UpdateUserDto) {
-    const updateUser = { ...usersDto };
-    await this.usersModel
-      .findByIdAndUpdate(id, updateUser, { new: true })
+    const { nickname, email, phone, refreshToken } = usersDto;
+    const updateFields: any = {};
+
+    const user = await this.usersModel.findById(id);
+    if (nickname && user.nickname.pop() !== nickname) {
+      updateFields.$push = { nickname: { $each: [nickname] } };
+    }
+
+    if (email) {
+      updateFields.email = email;
+    }
+
+    if (phone) {
+      updateFields.phone = phone;
+    }
+
+    if (refreshToken) {
+      updateFields.refreshToken = refreshToken;
+    }
+
+    const updatedUser = await this.usersModel
+      .findByIdAndUpdate(id, updateFields, { new: true })
       .exec();
+
+    return updatedUser;
   }
 
   async remove(id: string) {

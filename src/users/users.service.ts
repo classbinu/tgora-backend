@@ -33,10 +33,10 @@ export class UsersService {
   }
 
   async update(id, usersDto: UpdateUserDto) {
-    return this.usersRepository.update(id, usersDto);
+    return await this.usersRepository.update(id, usersDto);
   }
 
   async remove(id) {
-    return this.usersRepository.remove(id);
+    return await this.usersRepository.remove(id);
   }
 }

@@ -8,7 +8,7 @@ function generateRandomNickname() {
   const characters = 'Ii';
   let result = '';
 
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 32; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     result += characters[randomIndex];
   }
@@ -24,8 +24,8 @@ export class Users {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true, unique: true, default: generateRandomNickname })
-  nickname: string;
+  @Prop({ type: [String], default: generateRandomNickname })
+  nickname: string[];
 
   @Prop()
   email: string;

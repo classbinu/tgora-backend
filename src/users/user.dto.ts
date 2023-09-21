@@ -27,5 +27,7 @@ export class UpdateUserDto {
   @IsOptional()
   phone?: string;
 
+  @IsString()
+  @IsOptional()
   refreshToken?: string | null;
 }
