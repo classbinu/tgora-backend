@@ -23,6 +23,7 @@ export class IssuesMongoRepository implements IssuesRepository {
     isPublic: string | undefined,
   ): Promise<Issues[]> {
     const currentDate = new Date();
+    currentDate.setTime(currentDate.getTime() - 33 * 60 * 60 * 1000); //시간 빼기
     const queryConditions = {
       isPublic: '',
       dueDate: {},
