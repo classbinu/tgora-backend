@@ -50,7 +50,8 @@ export class AuthService {
     const mentees = await this.usersService.findUsersByMentorId(
       usersDto.mentor,
     );
-    if (mentees.length >= 5) {
+
+    if (usersDto.mentor !== '650be13ab1691d9dd4a42e31' && mentees.length >= 5) {
       throw new HttpException('만료된 초대장입니다.', HttpStatus.BAD_REQUEST);
     }
 
