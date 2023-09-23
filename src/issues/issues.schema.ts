@@ -30,6 +30,9 @@ export class Issues {
   @Prop({ required: true })
   isPublic: string;
 
+  @Prop({ required: true, default: false })
+  isNotice: boolean;
+
   @Prop()
   adminMemo: string;
 

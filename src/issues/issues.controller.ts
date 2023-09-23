@@ -44,6 +44,7 @@ export class IssuesController {
 
   @Put('/:id')
   updateIssue(@Param('id') id: string, @Body() issuesDto) {
+    console.log(issuesDto);
     return this.issuesService.updateIssue(id, issuesDto);
   }
 

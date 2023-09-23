@@ -58,7 +58,6 @@ export class IssuesMongoRepository implements IssuesRepository {
   async createIssue(issuesDto: IssuesDto) {
     const createIssue = {
       ...issuesDto,
-      createdAt: new Date(),
     };
     this.issuesModel.create(createIssue);
   }

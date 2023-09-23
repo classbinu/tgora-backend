@@ -7,6 +7,7 @@ export interface IssuesDto {
   participants?: string[];
   nonParticipants?: string[];
   isPublic: string;
+  isNotice: boolean;
   adminMemo: string;
   createdAt: Date;
 }
