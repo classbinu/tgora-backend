@@ -25,17 +25,24 @@ export class IssuesMongoRepository implements IssuesRepository {
   ): Promise<Issues[]> {
     const currentDate = new Date();
     currentDate.setTime(currentDate.getTime() - 9 * 60 * 60 * 1000); //시간 빼기
-    const queryConditions = {
+    const queryConditions: any = {
       isPublic: '',
       dueDate: {},
+    };
+
+    const sortConditions: any = {
+      dueDate: 1,
+      createdAt: -1,
     };
 
     if (state === 'open') {
       queryConditions.dueDate = { $gte: currentDate };
     } else if (state === 'closed') {
       queryConditions.dueDate = { $lt: currentDate };
+      sortConditions.dueDate = -1;
     } else if (state === 'all') {
       delete queryConditions.dueDate;
+      sortConditions.dueDate = -1;
     }
 
     if (isPublic === 'public') {
@@ -48,7 +55,7 @@ export class IssuesMongoRepository implements IssuesRepository {
 
     return await this.issuesModel
       .find(queryConditions)
-      .sort({ dueDate: 1 })
+      .sort(sortConditions)
       .exec();
   }
 
