@@ -24,9 +24,6 @@ export class Issues {
   @Prop([String])
   participants: string[];
 
-  @Prop([String])
-  nonParticipants: string[];
-
   @Prop({ required: true })
   isPublic: string;
 

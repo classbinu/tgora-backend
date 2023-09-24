@@ -5,7 +5,6 @@ export interface IssuesDto {
   summary: string;
   dueDate: Date;
   participants?: string[];
-  nonParticipants?: string[];
   isPublic: string;
   isNotice: boolean;
   adminMemo: string;
