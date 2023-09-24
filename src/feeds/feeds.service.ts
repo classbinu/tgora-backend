@@ -15,6 +15,14 @@ export class FeedsService {
     return await this.feedsRepository.getAllFeeds(channel);
   }
 
+  async getMyFeeds(userId: string) {
+    const feeds = await this.feedsRepository.getMyFeeds(userId);
+    if (!feeds) {
+      throw new NotFoundException('피드를 찾을 수 없습니다.');
+    }
+    return feeds;
+  }
+
   async getFeed(id) {
     const feed = await this.feedsRepository.getFeed(id);
     if (!feed) {

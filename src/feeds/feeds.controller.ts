@@ -25,6 +25,12 @@ export class FeedsController {
     return this.feedsService.getAllFeeds(channel);
   }
 
+  @Get('/my')
+  async getMyFeeds(@Req() req: Request) {
+    const userId = req.user['sub'];
+    return await this.feedsService.getMyFeeds(userId);
+  }
+
   @Get('/:id')
   getFeed(@Param('id') id: string) {
     return this.feedsService.getFeed(id);
