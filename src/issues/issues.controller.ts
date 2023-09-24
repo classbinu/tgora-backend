@@ -25,6 +25,11 @@ export class IssuesController {
     return this.issuesService.getAllIssues(state, isPublic);
   }
 
+  @Get('/participants')
+  getParticipants() {
+    return this.issuesService.getParticipants();
+  }
+
   @Get('/:id')
   getIssue(@Param('id') id: string) {
     return this.issuesService.getIssue(id);

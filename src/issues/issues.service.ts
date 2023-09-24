@@ -11,6 +11,10 @@ export class IssuesService {
     return await this.issuesRepository.getAllIssues(state, isPublic);
   }
 
+  async getParticipants() {
+    return await this.issuesRepository.getParticipants();
+  }
+
   async getIssue(id) {
     return await this.issuesRepository.getIssue(id);
   }

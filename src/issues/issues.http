@@ -6,6 +6,9 @@ GET {{server}}/issues?state=closed&isPublic=public
 ###
 GET {{server}}/issues/{{id}}
 
+### 이슈 참가자 숫자 요청
+GET {{server}}/issues/participants
+
 
 ###
 POST {{server}}/issues

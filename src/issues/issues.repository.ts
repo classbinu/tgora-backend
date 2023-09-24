@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 
 export interface IssuesRepository {
   getAllIssues(state: string, isPublic: string): Promise<IssuesDto[]>;
+  getParticipants(): Promise<number>;
   createIssue(issuesDto: IssuesDto);
   deleteIssue(id: string);
   updateIssue(id: string, issuesDto: IssuesDto);
@@ -49,6 +50,24 @@ export class IssuesMongoRepository implements IssuesRepository {
       .find(queryConditions)
       .sort({ dueDate: 1 })
       .exec();
+  }
+
+  async getParticipants(): Promise<number> {
+    const totalParticipants = await this.issuesModel.aggregate([
+      {
+        $group: {
+          _id: null, // 모든 문서를 하나의 그룹으로 그룹화합니다.
+          total: {
+            $sum: { $size: '$participants' }, // participants 배열의 길이를 합산합니다.
+          },
+        },
+      },
+    ]);
+    if (totalParticipants.length > 0) {
+      return totalParticipants[0].total;
+    } else {
+      return 0;
+    }
   }
 
   async getIssue(id: string): Promise<Issues> {
