@@ -6,7 +6,7 @@ import { FeedsDto } from './feeds.model';
 import { Model } from 'mongoose';
 
 export interface FeedsRepository {
-  getAllFeeds(): Promise<FeedsDto[]>;
+  getAllFeeds(channel: string): Promise<FeedsDto[]>;
   createFeed(feedsDto: FeedsDto);
   updateFeed(id: string, feedsDto: FeedsDto);
   deleteFeed(id: string);
@@ -21,8 +21,16 @@ export class FeedsMongoRepository implements FeedsRepository {
     @InjectModel(Feeds.name) private feedsModel: Model<FeedsDocument>,
   ) {}
 
-  async getAllFeeds(): Promise<Feeds[]> {
-    return await this.feedsModel.find().sort({ createdAt: -1 }).exec();
+  async getAllFeeds(channel: string): Promise<Feeds[]> {
+    const channels = {
+      elementary: '초등',
+      middle: '중등',
+      child: '유치원',
+      special: '특수',
+    };
+    const query = channel === 'every' ? {} : { channel: channels[channel] };
+
+    return await this.feedsModel.find(query).sort({ createdAt: -1 }).exec();
   }
 
   async getFeed(id: string): Promise<Feeds> {

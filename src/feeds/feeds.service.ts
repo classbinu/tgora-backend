@@ -11,8 +11,8 @@ import { FeedsMongoRepository } from './feeds.repository';
 export class FeedsService {
   constructor(private feedsRepository: FeedsMongoRepository) {}
 
-  async getAllFeeds() {
-    return await this.feedsRepository.getAllFeeds();
+  async getAllFeeds(channel: string) {
+    return await this.feedsRepository.getAllFeeds(channel);
   }
 
   async getFeed(id) {

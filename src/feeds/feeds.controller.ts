@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -20,8 +21,8 @@ export class FeedsController {
   constructor(private feedsService: FeedsService) {}
 
   @Get()
-  getAllIFeeds() {
-    return this.feedsService.getAllFeeds();
+  getAllIFeeds(@Query('channel') channel: string) {
+    return this.feedsService.getAllFeeds(channel);
   }
 
   @Get('/:id')
