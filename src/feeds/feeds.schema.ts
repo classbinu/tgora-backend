@@ -13,6 +13,9 @@ export class Feeds {
   nickname: string;
 
   @Prop({ required: true })
+  channel: string;
+
+  @Prop({ required: true })
   title: string;
 
   @Prop({ required: true })
