@@ -15,6 +15,10 @@ export class IssuesService {
     return await this.issuesRepository.getParticipants();
   }
 
+  async getMyParticipatedIssuesCount(userId: string) {
+    return await this.issuesRepository.getMyParticipatedIssuesCount(userId);
+  }
+
   async getIssue(id) {
     return await this.issuesRepository.getIssue(id);
   }

@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 export interface IssuesRepository {
   getAllIssues(state: string, isPublic: string): Promise<IssuesDto[]>;
   getParticipants(): Promise<number>;
+  getMyParticipatedIssuesCount(userId: string);
   createIssue(issuesDto: IssuesDto);
   deleteIssue(id: string);
   updateIssue(id: string, issuesDto: IssuesDto);
@@ -75,6 +76,16 @@ export class IssuesMongoRepository implements IssuesRepository {
     } else {
       return 0;
     }
+  }
+
+  async getMyParticipatedIssuesCount(userId: string) {
+    const totalIssueCount = await this.issuesModel.countDocuments({
+      isPublic: '공개',
+    });
+    const participatedIssuesCount = await this.issuesModel.countDocuments({
+      participants: userId,
+    });
+    return { participatedIssuesCount, totalIssueCount };
   }
 
   async getIssue(id: string): Promise<Issues> {

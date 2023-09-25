@@ -30,6 +30,13 @@ export class IssuesController {
     return this.issuesService.getParticipants();
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Get('/participatedCount')
+  getMyParticipatedIssues(@Req() req: Request) {
+    const userId = req.user['sub'];
+    return this.issuesService.getMyParticipatedIssuesCount(userId);
+  }
+
   @Get('/:id')
   getIssue(@Param('id') id: string) {
     return this.issuesService.getIssue(id);
@@ -49,7 +56,6 @@ export class IssuesController {
 
   @Put('/:id')
   updateIssue(@Param('id') id: string, @Body() issuesDto) {
-    console.log(issuesDto);
     return this.issuesService.updateIssue(id, issuesDto);
   }
 
