@@ -24,6 +24,12 @@ export class CommentsController {
     return this.commentsService.getAllComments();
   }
 
+  @Get('/my')
+  async getMyComments(@Req() req: Request) {
+    const userId = req.user['sub'];
+    return await this.commentsService.getMyComments(userId);
+  }
+
   @Get('/feed')
   getAllCommentsByFeedId(@Query() query) {
     const { feedId } = query;

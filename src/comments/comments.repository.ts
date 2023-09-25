@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 
 export interface CommentsRepository {
   getAllComments(): Promise<CommentsDto[]>;
+  getMyComments(userId: string): Promise<CommentsDto[]>;
   getAllCommentsByFeedId(feedId: string): Promise<Comments[]>;
   createComment(commentsDto: CommentsDto);
   updateComment(id: string, commentsDto: CommentsDto);
@@ -21,6 +22,20 @@ export class CommentsMongoRepository implements CommentsRepository {
 
   async getAllComments(): Promise<Comments[]> {
     return await this.commentsModel.find().sort({ createdAt: -1 }).exec();
+  }
+
+  async getMyComments(userId: string) {
+    const comments = await this.commentsModel
+      .find({ userId: userId })
+      .populate({
+        path: 'feedId',
+        model: 'Feeds',
+        select: '_id channel',
+        match: { _id: { $ne: null } },
+      })
+      .sort({ createdAt: -1 });
+    console.log(comments);
+    return comments;
   }
 
   async getAllCommentsByFeedId(feedId: string): Promise<Comments[]> {

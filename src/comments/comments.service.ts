@@ -21,6 +21,14 @@ export class CommentsService {
     return await this.commentsRepository.getAllComments();
   }
 
+  async getMyComments(userId: string) {
+    const comments = await this.commentsRepository.getMyComments(userId);
+    if (!comments) {
+      throw new NotFoundException('댓글을 찾을 수 없습니다.');
+    }
+    return comments;
+  }
+
   async getAllCommentsByFeedId(feedId: string) {
     const feed = await this.feedsService.getFeed(feedId);
     if (!feed) {
