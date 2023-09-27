@@ -21,8 +21,8 @@ export class FeedsController {
   constructor(private feedsService: FeedsService) {}
 
   @Get()
-  getAllIFeeds(@Query('channel') channel: string) {
-    return this.feedsService.getAllFeeds(channel);
+  getAllIFeeds(@Query('channel') channel: string, @Query('page') page: number) {
+    return this.feedsService.getAllFeeds(channel, page);
   }
 
   @Get('/my')
