@@ -9,6 +9,9 @@ export class Comments {
   @Prop({ required: true })
   userId: string;
 
+  @Prop({ default: '비공개' })
+  grade: string;
+
   @Prop({ required: true })
   nickname: string;
 

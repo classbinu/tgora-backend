@@ -5,6 +5,9 @@ export class CreateUserDto {
   username: string;
 
   @IsString()
+  grade: string;
+
+  @IsString()
   password: string;
 
   @IsString()
@@ -15,6 +18,9 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   password?: string;
+
+  @IsString()
+  grade?: string;
 
   @IsString()
   nickname?: string;

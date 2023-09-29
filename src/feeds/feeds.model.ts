@@ -1,5 +1,6 @@
 export interface FeedsDto {
   userId: string;
+  grade?: string;
   nickname: string;
   channel: string;
   title: string;

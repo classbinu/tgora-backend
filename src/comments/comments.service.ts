@@ -57,10 +57,12 @@ export class CommentsService {
       );
     }
     const userId = user.sub;
+    const grade = user.grade;
     const nickname = user.nickname;
     const createComment = {
       ...commentsDto,
       userId,
+      grade,
       nickname,
     };
     const newComment =

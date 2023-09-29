@@ -33,10 +33,12 @@ export class FeedsService {
 
   async createFeed(feedsDto: FeedsDto, user) {
     const userId = user.sub;
+    const grade = user.grade;
     const nickname = user.nickname;
     const createFeed = {
       ...feedsDto,
       userId,
+      grade,
       nickname,
     };
     await this.feedsRepository.createFeed(createFeed);

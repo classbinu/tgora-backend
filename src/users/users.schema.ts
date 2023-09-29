@@ -24,6 +24,9 @@ export class Users {
   @Prop({ required: true })
   password: string;
 
+  @Prop()
+  grade: string;
+
   @Prop({ type: [String], default: generateRandomNickname })
   nickname: string[];
 

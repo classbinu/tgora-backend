@@ -38,6 +38,7 @@ export class UsersMongoRepository implements UsersRepository {
       .select([
         '-username',
         '-password',
+        '-grade',
         '-nickname',
         '-createdAt',
         '-refreshToken',
@@ -53,6 +54,7 @@ export class UsersMongoRepository implements UsersRepository {
         '-username',
         '-password',
         '-nickname',
+        '-grade',
         '-createdAt',
         '-refreshToken',
         '-__v',
@@ -73,12 +75,16 @@ export class UsersMongoRepository implements UsersRepository {
   // }
 
   async update(id: string, usersDto: UpdateUserDto) {
-    const { nickname, email, phone, refreshToken } = usersDto;
+    const { grade, nickname, email, phone, refreshToken } = usersDto;
     const updateFields: any = {};
 
     const user = await this.usersModel.findById(id);
     if (nickname && user.nickname.pop() !== nickname) {
       updateFields.$push = { nickname: { $each: [nickname] } };
+    }
+
+    if (grade) {
+      updateFields.grade = grade;
     }
 
     if (email) {
