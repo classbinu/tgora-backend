@@ -34,7 +34,6 @@ export class CommentsMongoRepository implements CommentsRepository {
         match: { _id: { $ne: null } },
       })
       .sort({ createdAt: -1 });
-    console.log(comments);
     return comments;
   }
 
