@@ -29,7 +29,7 @@ export class FeedsMongoRepository implements FeedsRepository {
       child: '유치원',
       special: '특수',
     };
-    const pageSize = 500;
+    const pageSize = 200;
     const skip = (page - 1) * pageSize;
 
     const query = channel === 'every' ? {} : { channel: channels[channel] };
