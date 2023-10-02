@@ -5,6 +5,7 @@ export interface FeedsDto {
   channel: string;
   title: string;
   content: string;
+  image?: string;
   likes?: string[];
   comments?: string[];
   views?: string[];

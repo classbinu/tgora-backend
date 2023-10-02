@@ -6,10 +6,14 @@ import {
 
 import { FeedsDto } from './feeds.model';
 import { FeedsMongoRepository } from './feeds.repository';
+import { ImageUploadService } from './feeds.repository';
 
 @Injectable()
 export class FeedsService {
-  constructor(private feedsRepository: FeedsMongoRepository) {}
+  constructor(
+    private feedsRepository: FeedsMongoRepository,
+    private imageUploadService: ImageUploadService,
+  ) {}
 
   async getAllFeeds(channel: string, page: number) {
     return await this.feedsRepository.getAllFeeds(channel, page);
@@ -35,26 +39,59 @@ export class FeedsService {
     const userId = user.sub;
     const grade = user.grade;
     const nickname = user.nickname;
-    const createFeed = {
-      ...feedsDto,
-      userId,
-      grade,
-      nickname,
-    };
-    await this.feedsRepository.createFeed(createFeed);
+
+    try {
+      if (feedsDto.image) {
+        const imageUrl = await this.imageUploadService.uploadImage(
+          feedsDto.image, // Base64 이미지 데이터
+          'tgora', // AWS S3 버킷 이름
+          'feeds', // 이미지를 저장할 폴더 또는 경로
+        );
+
+        // 이미지 주소로 치환
+        feedsDto.image = imageUrl;
+      }
+
+      const createFeed = {
+        ...feedsDto,
+        userId,
+        grade,
+        nickname,
+      };
+      await this.feedsRepository.createFeed(createFeed);
+    } catch (error) {
+      throw new Error('피드 생성 중 오류 발생: ' + error);
+    }
   }
 
   async updateFeed(id: string, feedsDto: FeedsDto, userId: string) {
     const feed = await this.feedsRepository.getFeed(id);
 
-    if (!feed) {
-      throw new NotFoundException('피드를 찾을 수 없습니다.');
-    }
+    try {
+      if (!feed) {
+        throw new NotFoundException('피드를 찾을 수 없습니다.');
+      }
 
-    if (feed.userId !== userId) {
-      throw new UnauthorizedException('수정 권한이 없습니다.');
+      if (feed.userId !== userId) {
+        throw new UnauthorizedException('수정 권한이 없습니다.');
+      }
+
+      if (feedsDto.image) {
+        const imageUrl = await this.imageUploadService.uploadImage(
+          feedsDto.image, // Base64 이미지 데이터
+          'tgora', // AWS S3 버킷 이름
+          'feeds', // 이미지를 저장할 폴더 또는 경로
+        );
+
+        // 이미지 주소로 치환
+        feedsDto.image = imageUrl;
+      } else {
+        feedsDto.image = feed.image;
+      }
+      return await this.feedsRepository.updateFeed(id, feedsDto);
+    } catch (error) {
+      throw new Error('피드 업데이트 중 오류 발생: ' + error);
     }
-    return await this.feedsRepository.updateFeed(id, feedsDto);
   }
 
   async deleteFeed(id: string, userId: string) {
@@ -67,6 +104,7 @@ export class FeedsService {
     if (feed.userId !== userId) {
       throw new UnauthorizedException('삭제 권한이 없습니다.');
     }
+    await this.imageUploadService.deleteImage(`feeds/${feed.image}`, 'tgora');
     return await this.feedsRepository.deleteFeed(id);
   }
 

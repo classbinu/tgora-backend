@@ -24,6 +24,9 @@ export class Feeds {
   @Prop({ required: true })
   content: string;
 
+  @Prop()
+  image: string;
+
   @Prop([String])
   likes: string[];
 
