@@ -44,6 +44,29 @@ export class FeedsMongoRepository implements FeedsRepository {
       .exec();
   }
 
+  async getSearchFeeds(channel: string, q: string): Promise<Feeds[]> {
+    const channels = {
+      elementary: '초등',
+      middle: '중등',
+      child: '유치원',
+      special: '특수',
+    };
+
+    const query = channel === 'every' ? {} : { channel: channels[channel] };
+    const searchCondition = {
+      $or: [
+        { title: { $regex: q, $options: 'i' } },
+        { content: { $regex: q, $options: 'i' } },
+      ],
+    };
+    const combinedQuery = { ...query, ...searchCondition };
+
+    return await this.feedsModel
+      .find(combinedQuery)
+      .sort({ createdAt: -1 })
+      .exec();
+  }
+
   async getMyFeeds(userId: string) {
     const feeds = await this.feedsModel
       .find({ userId: userId })

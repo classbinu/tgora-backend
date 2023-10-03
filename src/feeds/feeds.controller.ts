@@ -25,6 +25,11 @@ export class FeedsController {
     return this.feedsService.getAllFeeds(channel, page);
   }
 
+  @Get('/search')
+  getSearchFeeds(@Query('channel') channel: string, @Query('q') q: string) {
+    return this.feedsService.getSearchFeeds(channel, q);
+  }
+
   @Get('/my')
   async getMyFeeds(@Req() req: Request) {
     const userId = req.user['sub'];

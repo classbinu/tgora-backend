@@ -19,6 +19,10 @@ export class FeedsService {
     return await this.feedsRepository.getAllFeeds(channel, page);
   }
 
+  async getSearchFeeds(channel: string, q: string) {
+    return await this.feedsRepository.getSearchFeeds(channel, q);
+  }
+
   async getMyFeeds(userId: string) {
     const feeds = await this.feedsRepository.getMyFeeds(userId);
     if (!feeds) {
