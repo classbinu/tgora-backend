@@ -1,73 +1,72 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# T-아고라
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+교육 이슈 모음 및 현식 교사 익명 커뮤니티
+[https://tgora.kr](https://tgora.kr)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+개발인원: 1인
+개발기간: 2023/09/15 ~ 2023/10/03
 
-## Description
+## 프론트엔드 저장소
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [https://github.com/classbinu/tgora-frontend](https://github.com/classbinu/tgora-frontend)
 
-## Installation
+## 기획 의도
 
-```bash
-$ npm install
-```
+- 이미 참여한 교육 이슈에 중복으로 참여하는 불편함 존재
+- 기존 교사 커뮤니티에서 산발적으로 게시되는 교육 이슈 참여 독려글에 따른 피로도 누적
+- 현직 교사들이 교육 이슈에 대해 의견을 나누고, 참여하고, 관리할 수 있는 커뮤니티가 필요
 
-## Running the app
+## 주요 기능
 
-```bash
-# development
-$ npm run start
+- 교육 이슈(입법, 청원, 설문, 서명 등) 모아보기
+- 교육 이슈 참여 여부 관리
+- 현직 교사 전용 익명 커뮤니티(피드, 댓글)
 
-# watch mode
-$ npm run start:dev
+## 기술 스택
 
-# production mode
-$ npm run start:prod
-```
+### 백엔드
 
-## Test
+- Nest.js
 
-```bash
-# unit tests
-$ npm run test
+### 프론트 엔드
 
-# e2e tests
-$ npm run test:e2e
+- Svelte Kit
+- Tailwind CSS
 
-# test coverage
-$ npm run test:cov
-```
+### 데이터베이스
 
-## Support
+- MongoDB
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 배포
 
-## Stay in touch
+- Fly.io
+- Netlify
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 기술적 챌린지
 
-## License
+### 1. 피드 클릭 후 뒤로 가기 시 스크롤이 최상단으로 이동
 
-Nest is [MIT licensed](LICENSE).
+- 최초 피드 로드 후 상태 저장 후 뒤로 가기 시에는 Fetch 없이 렌더링
+
+### 2. 피드 내 URL에 링크가 적용되지 않음
+
+- 정규식으로 URL 감지 시 링크로 변환
+
+### 3. 피드 내 script 입력 시 악의적 script 실행 가능
+
+- 정규식으로 script 태그 감지하여 빈 문자로 치환
+
+## 이전 프로젝트
+
+[정글피디아 v1](https://github.com/classbinu/jungle-pedia)
+
+## 관련 포스팅
+
+[우당탕탕 T-아고라 개발 비하인드 스토리](https://velog.io/@classbinu/%EC%9A%B0%EB%8B%B9%ED%83%95%ED%83%95-T-%EC%95%84%EA%B3%A0%EB%9D%BC-%EA%B0%9C%EB%B0%9C-%EB%B9%84%ED%95%98%EC%9D%B8%EB%93%9C-%EC%8A%A4%ED%86%A0%EB%A6%AC)
+
+## Contact
+
+> 서비스와 코드는 누구든지 편하게 쓰셔도 됩니다.  
+> 출처를 남겨주시면 감사하겠지만, 남기지 않으셔도 괜찮습니다.🙇‍♂️  
+> 서비스에 대한 피드백, 질문은 언제든지 환영합니다.🥳
+> classbinu@gmail.com
